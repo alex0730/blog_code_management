@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lee.mapper.MenuMapper">
+    <!-- 返回值映射map -->
+    <resultMap id="menuMapper" type="com.lee.entity.MenuModel">
+        <result property="id" column="id"/>
+        <result property="workId" column="work_id"/>
+        <result property="cnName" column="cn_name"/>
+        <result property="name" column="name"/>
+        <result property="remark" column="remark"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="level" column="level"/>
+    </resultMap>
+
+    <!-- 根据权限查询用户菜单权限-->
+    <select id="queryMenuByUserName" resultMap="menuMapper">
+        SELECT
+            menu.work_id AS work_id,
+            menu.cn_name AS cn_name,
+            menu.`name` AS name,
+            menu.remark AS remark,
+            menu.parent_id AS parent_id,
+            menu.level AS level
+        FROM
+            admin
+            JOIN admin_role ON admin.id = admin_role.admin_id
+            JOIN role ON admin_role.role_work_id = role.work_id
+            JOIN role_menu ON role.work_id = role_menu.role_work_id
+            JOIN menu ON role_menu.menu_work_id = menu.work_id
+        WHERE
+            admin.username = #{username}
+            AND role_menu.role_menu_status = 0 AND admin_role.admin_role_status = 0
+    </select>
+
+    <!-- 查询字段公共sql -->
+    <sql id="selectAllColumns">
+        SELECT
+            <![CDATA[
+				 id,
+				 work_id,
+				 cn_name,
+				 name,
+				 remark,
+				 parent_id
+			]]>
+        FROM menu record
+    </sql>
+
+    <sql id="where_fragement">
+        where is_delete = 0
+        <if test="entity!=null">
+            <if test="entity.id != null and entity.id != ''">
+                <![CDATA[ and record.id  = #{entity.id} ]]>
+            </if>
+            <if test="entity.workId != null and entity.workId != ''">
+                <![CDATA[ and record.work_id  = #{entity.workId} ]]>
+            </if>
+            <if test="entity.cnName != null and entity.cnName != ''">
+                <![CDATA[ and record.cn_name  = #{entity.cnName} ]]>
+            </if>
+            <if test="entity.name != null and entity.name != ''">
+                <![CDATA[ and record.name  = #{entity.name} ]]>
+            </if>
+            <if test="entity.remark != null and entity.remark != ''">
+                <![CDATA[ and record.remark  = #{entity.remark} ]]>
+            </if>
+            <if test="entity.parentId != null and entity.parentId != ''">
+                <![CDATA[ and record.parent_id  = #{entity.parentId} ]]>
+            </if>
+        </if>
+    </sql>
+
+    <!--&lt;!&ndash; 查询数量公共sql &ndash;&gt;-->
+    <!--<sql id="count_Tail">-->
+		<!--select count(1) from menu record-->
+	<!--</sql>-->
+
+    <!--&lt;!&ndash; 分页公共sql &ndash;&gt;-->
+    <!--<sql id="pagination_tail">-->
+	  <!--limit #{page.pageOffset} , #{page.rows}-->
+	<!--</sql>-->
+
+
+    <!--<select id="queryList" resultMap="menuMapper">-->
+        <!--<include refid="selectAllColumns"/>-->
+        <!--<include refid="where_fragement"/>-->
+    <!--</select>-->
+
+    <!--&lt;!&ndash; 查询总数量 &ndash;&gt;-->
+    <!--<select id="queryCount" resultType="long">-->
+        <!--<include refid="count_Tail"></include>-->
+        <!--<include refid="where_fragement"></include>-->
+    <!--</select>-->
+
+    <!--&lt;!&ndash; 查询单个实体 &ndash;&gt;-->
+    <!--<select id="queryById" resultMap="menuMapper">-->
+        <!--<include refid="selectAllColumns"/>-->
+        <!--where-->
+        <!--record.id = #{id}-->
+    <!--</select>-->
+
+    <!--&lt;!&ndash; 新增 &ndash;&gt;-->
+    <!--<insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.oristartech.pipeline.model.MenuModel">-->
+		<!--insert into menu(-->
+				<!--id,-->
+				<!--work_id,-->
+				<!--cn_name,-->
+				<!--name,-->
+				<!--remark,-->
+				<!--parent_id-->
+		<!--)values(-->
+				<!--#{id},-->
+				<!--#{workId},-->
+				<!--#{cnName},-->
+				<!--#{name},-->
+				<!--#{remark},-->
+				<!--#{parentId}-->
+		<!--)-->
+	<!--</insert>-->
+    <!--&lt;!&ndash; 编辑 &ndash;&gt;-->
+    <!--<update id="update" parameterType="com.oristartech.pipeline.model.MenuModel">-->
+        <!--update menu record-->
+        <!--<set>-->
+            <!--<if test="workId != null ">-->
+                <!--record.work_id = #{workId},-->
+            <!--</if>-->
+            <!--<if test="cnName != null ">-->
+                <!--record.cn_name = #{cnName},-->
+            <!--</if>-->
+            <!--<if test="name != null ">-->
+                <!--record.name = #{name},-->
+            <!--</if>-->
+            <!--<if test="remark != null ">-->
+                <!--record.remark = #{remark},-->
+            <!--</if>-->
+            <!--<if test="parentId != null ">-->
+                <!--record.parent_id = #{parentId}-->
+            <!--</if>-->
+        <!--</set>-->
+        <!--where id = #{id}-->
+    <!--</update>-->
+
+    <!--&lt;!&ndash; 删除 &ndash;&gt;-->
+    <!--<update id="deleteByIds">-->
+        <!--update menu set is_delete = 1-->
+        <!--<if test=" codes != null and codes.length > 0 ">-->
+            <!--where id in-->
+            <!--<foreach collection="codes" open="(" separator="," close=")" item="code">-->
+                <!--#{code}-->
+            <!--</foreach>-->
+        <!--</if>-->
+        <!--<if test=" codes == null or codes.length == 0 ">-->
+            <!--where 1 = 3-->
+        <!--</if>-->
+    <!--</update>-->
+    <!--<update id="delete">-->
+        <!--update menu set is_delete = 1-->
+        <!--<if test=" id != null and id != ''">-->
+            <!--where id = #{id}-->
+        <!--</if>-->
+        <!--<if test=" id == null or id == '' ">-->
+            <!--where 1 = 3-->
+        <!--</if>-->
+    <!--</update>-->
+
+</mapper>

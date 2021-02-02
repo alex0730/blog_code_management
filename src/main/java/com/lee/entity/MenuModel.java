@@ -1,0 +1,195 @@
+package com.lee.entity;
+
+import java.io.Serializable;
+import java.util.List;
+
+/**
+ * <p>Description: [数据权限表(可访问的页面、资源等)model]</p>
+ * Created on 2021年02月01日
+ *
+ * @author <a href="mailto: wuyingya@oristartech.com">吴迎亚</a>
+ * @version 1.0
+ */
+public class MenuModel implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 主键Id
+     */
+    private Integer id;
+    /**
+     * 业务主键
+     */
+    private String workId;
+    /**
+     * 中文名称
+     */
+    private String cnName;
+    /**
+     * 名称
+     */
+    private String name;
+    /**
+     * 描述
+     */
+    private String remark;
+    /**
+     * 父节点(0：为父节点)
+     */
+    private String parentId;
+
+    /**
+     * 菜单级别(一级菜单（父节点）：1；二级菜单：2；依次类推)
+     */
+    private Integer level;
+    /**
+     * 子菜单
+     */
+    private List<MenuModel> sonMenus;
+
+    // setter and getter
+
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public List<MenuModel> getSonMenus() {
+        return sonMenus;
+    }
+
+    public void setSonMenus(List<MenuModel> sonMenus) {
+        this.sonMenus = sonMenus;
+    }
+
+    /**
+     * <p>Discription:[主键Id]</p>
+     * Created on 2021年02月01日
+     *
+     * @return Integer
+     * @author:吴迎亚
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * <p>Discription:[主键Id]</p>
+     * Created on 2021年02月01日
+     *
+     * @author:吴迎亚
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    /**
+     * <p>Discription:[业务主键]</p>
+     * Created on 2021年02月01日
+     *
+     * @return String
+     * @author:吴迎亚
+     */
+    public String getWorkId() {
+        return workId;
+    }
+
+    /**
+     * <p>Discription:[业务主键]</p>
+     * Created on 2021年02月01日
+     *
+     * @author:吴迎亚
+     */
+    public void setWorkId(String workId) {
+        this.workId = workId;
+    }
+
+    /**
+     * <p>Discription:[中文名称]</p>
+     * Created on 2021年02月01日
+     *
+     * @return String
+     * @author:吴迎亚
+     */
+    public String getCnName() {
+        return cnName;
+    }
+
+    /**
+     * <p>Discription:[中文名称]</p>
+     * Created on 2021年02月01日
+     *
+     * @author:吴迎亚
+     */
+    public void setCnName(String cnName) {
+        this.cnName = cnName;
+    }
+
+    /**
+     * <p>Discription:[名称]</p>
+     * Created on 2021年02月01日
+     *
+     * @return String
+     * @author:吴迎亚
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * <p>Discription:[名称]</p>
+     * Created on 2021年02月01日
+     *
+     * @author:吴迎亚
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * <p>Discription:[描述]</p>
+     * Created on 2021年02月01日
+     *
+     * @return String
+     * @author:吴迎亚
+     */
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * <p>Discription:[描述]</p>
+     * Created on 2021年02月01日
+     *
+     * @author:吴迎亚
+     */
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    /**
+     * <p>Discription:[父节点(0：为父节点)]</p>
+     * Created on 2021年02月01日
+     *
+     * @return String
+     * @author:吴迎亚
+     */
+    public String getParentId() {
+        return parentId;
+    }
+
+    /**
+     * <p>Discription:[父节点(0：为父节点)]</p>
+     * Created on 2021年02月01日
+     *
+     * @author:吴迎亚
+     */
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+}
