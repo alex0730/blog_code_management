@@ -44,12 +44,36 @@ public class MenuModel implements Serializable {
      */
     private Integer level;
     /**
+     * 排序
+     */
+    private Integer orderId;
+    /**
+     * 菜单Url
+     */
+    private String menuUrl;
+    /**
      * 子菜单
      */
     private List<MenuModel> sonMenus;
 
     // setter and getter
 
+
+    public String getMenuUrl() {
+        return menuUrl;
+    }
+
+    public void setMenuUrl(String menuUrl) {
+        this.menuUrl = menuUrl;
+    }
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
 
     public Integer getLevel() {
         return level;

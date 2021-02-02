@@ -12,6 +12,8 @@
         <result property="remark" column="remark"/>
         <result property="parentId" column="parent_id"/>
         <result property="level" column="level"/>
+        <result property="orderId" column="order_id"/>
+        <result property="menuUrl" column="menu_url"/>
     </resultMap>
 
     <!-- 根据权限查询用户菜单权限-->
@@ -22,7 +24,8 @@
             menu.`name` AS name,
             menu.remark AS remark,
             menu.parent_id AS parent_id,
-            menu.level AS level
+            menu.level AS level,
+            menu.menu_url AS menu_url
         FROM
             admin
             JOIN admin_role ON admin.id = admin_role.admin_id
@@ -32,6 +35,8 @@
         WHERE
             admin.username = #{username}
             AND role_menu.role_menu_status = 0 AND admin_role.admin_role_status = 0
+        ORDER BY
+            order_id
     </select>
 
     <!-- 查询字段公共sql -->

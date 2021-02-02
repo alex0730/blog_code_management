@@ -1,43 +1,61 @@
 package com.lee.controller.admin;
 
 
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.lee.common.DataGrid;
+import com.lee.service.PictureService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author lee
- * @since 2020-02-22
- */
+ * @Description [图片管理控制器]
+ * @Author <a href="mailto: wuyingya@oristartech.com">吴迎亚</a>
+ * @Date 2021/2/2 13:28
+ **/
 @Controller
-@RequestMapping("/admin/photo")
-public class PhotoController extends BasicController {
-//    @Autowired
-//    ArticleService articleService;
-//    @Autowired
-//    CateService cateService;
+@RequestMapping("/admin/pic")
+public class PictureController extends BasicController {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private PictureService pictureService;
+
     @GetMapping("list")
-    public String list(){
-        return "/admin/photo/list";
+    public String list() {
+        return "admin/pic/list";
     }
-//    @PostMapping("findList")
-//    @ResponseBody
-//    public DataGrid findList(@RequestBody JSONObject jsonObject){
-//        Map<String, Object> searchParams = (HashMap<String, Object>) jsonObject.get("search");
-//        int offset = "".equals(jsonObject.getString("offset")) ? 0 : jsonObject.getIntValue("offset");
-//        int size = "".equals(jsonObject.getString("limit")) ? 10 : jsonObject.getIntValue("limit");
-//
-//        IPage<Map<String, Object>> page = articleService.getPageInfo(searchParams, offset, size);
-//
-//        DataGrid result = new DataGrid();
-//        result.setTotal(page.getTotal());
-//        result.setRows(page.getRecords());
-//        return result;
-//    }
+
+    /**
+     * 分页查询图片列表
+     *
+     * @param jsonObject
+     * @return
+     */
+    @PostMapping("findList")
+    @ResponseBody
+    public DataGrid findList(@RequestBody JSONObject jsonObject) {
+        DataGrid result = new DataGrid();
+        try {
+            Map<String, Object> searchParams = (HashMap<String, Object>) jsonObject.get("search");
+            IPage<Map<String, Object>> page = pictureService.getPageInfo(searchParams,
+                    StringUtils.isEmpty(jsonObject.getString("offset")) ? 0 : jsonObject.getIntValue("offset"),
+                    StringUtils.isEmpty(jsonObject.getString("limit")) ? 10 : jsonObject.getIntValue("limit"));
+            result.setTotal(page.getTotal());
+            result.setRows(page.getRecords());
+        } catch (Exception e) {
+            logger.error("分页查询图片列表异常：", e);
+        }
+        return result;
+    }
 //    @GetMapping("add")
 //    public String add(Model model) {
 //        model.addAttribute("cateInfos",cateService.getList());
