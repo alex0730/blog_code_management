@@ -7,11 +7,15 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lee.entity.PictureModel;
 import com.lee.mapper.PictureMapper;
 import com.lee.service.PictureService;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.Map;
 
 /**
@@ -26,8 +30,30 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, PictureModel>
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    private final String filePath = "E:/blog_code_management/src/main/resources/static/admin/images";
+
     @Autowired
     private PictureMapper pictureMapper;
+
+    /**
+     * 文件上传方法
+     *
+     * @param file
+     * @param request
+     * @return
+     */
+    @Override
+    public String uploadFile(MultipartFile file, HttpServletRequest request) {
+        String imgFilePath = "";
+        try {
+            // TODO 根据“图片标签”表确定上传到哪个文件夹下
+            imgFilePath = "/shanghai/" + file.getOriginalFilename();
+            FileUtils.copyInputStreamToFile(file.getInputStream(), new File(filePath + imgFilePath));
+        } catch (Exception e) {
+            logger.error("上传文件失败：", e);
+        }
+        return imgFilePath;
+    }
 
     /**
      * 分页查询图片列表

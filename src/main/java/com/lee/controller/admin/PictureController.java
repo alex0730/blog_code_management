@@ -4,14 +4,22 @@ package com.lee.controller.admin;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.lee.common.DataGrid;
+import com.lee.common.DateTimeUtil;
+import com.lee.common.Message;
+import com.lee.entity.Admin;
+import com.lee.entity.PictureModel;
 import com.lee.service.PictureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +36,15 @@ public class PictureController extends BasicController {
 
     @Autowired
     private PictureService pictureService;
+
+    @PostMapping("upload")
+    @ResponseBody
+    public String upload(HttpServletRequest request) throws Exception {
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+        MultipartFile file = null;
+        file = multipartRequest.getFile("file");// 获取上传文件名
+        return pictureService.uploadFile(file, request);
+    }
 
     @GetMapping("list")
     public String list() {
@@ -56,33 +73,44 @@ public class PictureController extends BasicController {
         }
         return result;
     }
-//    @GetMapping("add")
-//    public String add(Model model) {
-//        model.addAttribute("cateInfos",cateService.getList());
-//        return "admin/article/add";
-//    }
-//
-//    @PostMapping("add")
-//    @ResponseBody
-//    public Message doAdd(@Validated Article article, HttpServletRequest request){
-//        try {
-//            Admin admin = getCurrentUser(request);
-//            if(admin != null) {
-//                if(article.getIsTop() == null) {
-//                    article.setIsTop(0);
-//                }
-//                article.setCreateTime(DateTimeUtil.nowTimeStr());
-//                article.setMemberId(admin.getId());
-//                articleService.save(article);
-//                return Message.success("文章添加成功！");
-//            } else {
-//                return Message.fail("登录超时，请重新登录！",null,"/admin/login");
-//            }
-//        } catch (Exception e) {
-//            return Message.fail("文章数据保存异常，保存失败！");
-//        }
-//
-//    }
+
+    /**
+     * 跳转新建图片页面
+     *
+     * @return
+     */
+    @GetMapping("add")
+    public String add() {
+        return "admin/pic/add";
+    }
+
+    /**
+     * 保存图片信息
+     *
+     * @param pictureModel
+     * @param request
+     * @return
+     */
+    @PostMapping("add")
+    @ResponseBody
+    public Message doAdd(@Validated PictureModel pictureModel, HttpServletRequest request) {
+        try {
+            Admin admin = getCurrentUser(request);
+            if (null == admin) {
+                return Message.fail("登录超时，请重新登录！", null, "/admin/login");
+            }
+            if (null == pictureModel) {
+                return Message.fail("图片信息确实，请检查上传参数", null, "/admin/login");
+            }
+            pictureModel.setAdminId(admin.getId());
+            pictureModel.setCreateTime(DateTimeUtil.nowTimeStr());
+            pictureService.save(pictureModel);
+        } catch (Exception e) {
+            logger.error("保存图片信息异常：", e);
+            return Message.fail("图片保存失败！");
+        }
+        return Message.success("图片保存成功！");
+    }
 //    @PostMapping("top")
 //    @ResponseBody
 //    public Message top(@RequestParam(value = "id")Integer id,@RequestParam(value = "istop")Integer istop){

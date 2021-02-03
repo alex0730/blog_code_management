@@ -62,6 +62,10 @@ public class PictureModel extends Model<PictureModel> implements Serializable {
      */
     private String picUrl;
     /**
+     * 缩略图地址
+     */
+    private String thumbnailUrl;
+    /**
      * 创建时间
      */
     private String createTime;
@@ -71,6 +75,15 @@ public class PictureModel extends Model<PictureModel> implements Serializable {
     private String updateTime;
 
     // setter and getter
+
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
 
     public String getCreateTime() {
         return createTime;

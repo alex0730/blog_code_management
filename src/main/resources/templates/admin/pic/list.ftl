@@ -15,8 +15,8 @@
         <div class="col-sm-12">
             <div class="pull-left">
                 <button class="btn list-btn btn-primary " type="button"
-                        onclick="openModal(cate_insert_modal_url, 'cate_create_modal', pic_list_table_id )">
-                    <i class="fa fa-fw fa-plus"></i>新增图片
+                        onclick="openModal(pic_insert_modal_url, 'pic_create_modal', pic_list_table_id )">
+                    <i class="fa fa-fw fa-plus"></i>上传图片
                 </button>
                 <button class="btn list-btn btn-danger " type="button"
                         onclick="deleteBatch(cate_list_delete_url,  pic_list_table_id )">
@@ -47,8 +47,8 @@
             <table class="table table-striped table-hover table-no-bordered " id="pic_list_table"></table>
         </div>
     </div>
-    <!-- 注册modal -->
-    <div class="modal modal-top fade" id="cate_create_modal" tabindex="-1">
+    <!-- 图片上传modal -->
+    <div class="modal modal-top fade" id="pic_create_modal" tabindex="-1">
         <div class="modal-dialog modal-primary">
             <div class="modal-content"></div>
         </div>
@@ -66,14 +66,11 @@
 <!-- /#wrapper -->
 <#include "admin/common/_js.ftl">
 <script>
-    var cate_insert_modal_url = '/admin/cate/add'; //新增注册url
-    var cate_list_view_url = '/admin/cate/view/'; //查看信息URL
+    var pic_insert_modal_url = '/admin/pic/add'; //新增注册url
     var cate_list_update_url = '/admin/cate/update/'; //更新信息URL
     var cate_list_delete_url = '/admin/cate/delete'; //删除URL
-
     var pic_list_table; //用户表对象
     var pic_list_table_id = 'pic_list_table'; //用户表id
-
     $(function () {
         selectMenuByID("admin_pic");
         pic_list_loadData();
@@ -101,7 +98,12 @@
         {
             field: 'pic_url',
             width: 150,//宽度
-            title: '缩略图'
+            title: '缩略图',
+            formatter: function (value, row, index) {
+                var content = '<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="" src="/static/admin/images' + row.pic_url + '" class="user-image"></a>';
+                // var content = '<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="" src="/static/admin/images/avator.jpg" class="user-image"></a>';
+                return content;
+            }
         },
         {
             field: 'title',
