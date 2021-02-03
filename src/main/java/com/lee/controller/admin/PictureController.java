@@ -9,18 +9,20 @@ import com.lee.common.Message;
 import com.lee.entity.Admin;
 import com.lee.entity.PictureModel;
 import com.lee.service.PictureService;
+import com.lee.service.PictureTagService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,13 +39,13 @@ public class PictureController extends BasicController {
     @Autowired
     private PictureService pictureService;
 
+    @Autowired
+    private PictureTagService pictureTagService;
+
     @PostMapping("upload")
     @ResponseBody
     public String upload(HttpServletRequest request) throws Exception {
-        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-        MultipartFile file = null;
-        file = multipartRequest.getFile("file");// 获取上传文件名
-        return pictureService.uploadFile(file, request);
+        return pictureService.uploadFile(((MultipartHttpServletRequest) request).getFile("file"), request);
     }
 
     @GetMapping("list")
@@ -80,7 +82,8 @@ public class PictureController extends BasicController {
      * @return
      */
     @GetMapping("add")
-    public String add() {
+    public String add(Model model) {
+        model.addAttribute("pictureTagInfos", pictureTagService.list());
         return "admin/pic/add";
     }
 
@@ -111,9 +114,46 @@ public class PictureController extends BasicController {
         }
         return Message.success("图片保存成功！");
     }
+
+    /**
+     * 删除图片
+     *
+     * @param ids
+     * @return
+     */
+    @PostMapping("delete")
+    @ResponseBody
+    public Message delete(@RequestParam(value = "ids") List<Integer> ids) {
+        try {
+            pictureService.removeByIds(ids);
+        } catch (Exception e) {
+            logger.error("删除图片异常", e);
+            return Message.fail("删除图片异常！");
+        }
+        return Message.success("删除图片成功");
+    }
+
+
+    @PostMapping("sort")
+    @ResponseBody
+    public Message sort(@RequestParam(value = "id") Integer id,
+                        @RequestParam(value = "sort") Integer sort) {
+        try {
+            PictureModel pictureModel = pictureService.getById(id);
+            if (pictureModel != null) {
+                pictureModel.setSort(sort);
+                pictureService.updateById(pictureModel);
+                return Message.success("排序成功！");
+            } else {
+                return Message.fail("图片不存在或已被删除，排序失败！");
+            }
+        } catch (Exception e) {
+            return Message.fail("排序数据操作异常，排序失败！");
+        }
+    }
 //    @PostMapping("top")
 //    @ResponseBody
-//    public Message top(@RequestParam(value = "id")Integer id,@RequestParam(value = "istop")Integer istop){
+//    public Message top(@RequestParam(value = "id")Integer id,@Re  questParam(value = "istop")Integer istop){
 //        try{
 //           Article article =  articleService.getById(id);
 //           if(article != null) {
@@ -164,18 +204,6 @@ public class PictureController extends BasicController {
 //            }
 //        } catch (Exception e) {
 //            return Message.fail("文章修改保存异常，操作失败！");
-//        }
-//    }
-//    @PostMapping("delete")
-//    @ResponseBody
-//    public Message delete(@RequestParam(value = "ids") List<Integer> ids) {
-//        try {
-//            for (int id : ids) {
-//                articleService.deleteArticleAndCommentById(id);
-//            }
-//            return Message.success("文章删除成功");
-//        } catch (Exception e) {
-//            return Message.fail("文章删除异常！");
 //        }
 //    }
 

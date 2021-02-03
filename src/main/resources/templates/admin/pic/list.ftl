@@ -19,7 +19,7 @@
                     <i class="fa fa-fw fa-plus"></i>上传图片
                 </button>
                 <button class="btn list-btn btn-danger " type="button"
-                        onclick="deleteBatch(cate_list_delete_url,  pic_list_table_id )">
+                        onclick="deleteBatch(pic_list_delete_url,  pic_list_table_id )">
                     <i class="fa fa-fw fa-times"></i>删除图片
                 </button>
             </div>
@@ -68,7 +68,7 @@
 <script>
     var pic_insert_modal_url = '/admin/pic/add'; //新增注册url
     var cate_list_update_url = '/admin/cate/update/'; //更新信息URL
-    var cate_list_delete_url = '/admin/cate/delete'; //删除URL
+    var pic_list_delete_url = '/admin/pic/delete'; //删除URL
     var pic_list_table; //用户表对象
     var pic_list_table_id = 'pic_list_table'; //用户表id
     $(function () {
@@ -144,7 +144,7 @@
                     + pic_list_table_id
                     + '\');">修改</button>&nbsp;';
                 result += '<button class="btn btn-xs btn-danger" onclick="deleteConfirm(\''
-                    + cate_list_delete_url
+                    + pic_list_delete_url
                     + '\',\'' + row.id + '\',\'' + pic_list_table_id + '\');">删除</button>';
                 return result;
             }
@@ -176,7 +176,7 @@
                     var sort = $(this).val();
                     if (isDigits(sort)) {
                         $.ajax({
-                            url: '/admin/cate/sort',
+                            url: '/admin/pic/sort',
                             type: 'post',
                             data: {id: id, sort: sort},
                             dataType: 'json',

@@ -39,8 +39,13 @@
                     <label>图片标签</label>
                 </div>
                 <div class="col-md-9 controls">
-                    <input class="form-control validate" name="tags" type="text" placeholder="多个标签请用 | 分开"
-                           data-options="required:true,messages:{required:'请输入图片标签'}">
+                    <select name="tags" class="form-control validate"
+                            data-options="required:true,messages:{required:'请选择一个图片标签'}">
+                        <option value="">图片标签</option>
+                        <#list pictureTagInfos as pictureTagInfo>
+                            <option value="${pictureTagInfo.tagCnName}">${pictureTagInfo.tagCnName}</option>
+                        </#list>
+                    </select>
                 </div>
             </div>
             <div class="row form-group">
