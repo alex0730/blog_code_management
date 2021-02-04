@@ -1,10 +1,47 @@
 package com.lee;
 
+import com.github.tobato.fastdfs.domain.StorePath;
+import com.github.tobato.fastdfs.service.FastFileStorageClient;
+import org.apache.commons.io.FilenameUtils;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.io.*;
 
 @SpringBootTest
 class SbblogApplicationTests {
+
+    @Autowired
+    private FastFileStorageClient storageClient;
+
+    @Test
+    public void uploadTest() {
+        InputStream is = null;
+        try {
+            // 获取文件源
+            File source = new File("C:\\Users\\Administrator\\Desktop\\g个人博客\\框架源码\\upload\\1.jpg");
+            // 获取文件流
+            is = new FileInputStream(source);
+            // 进行文件上传
+            StorePath storePath = storageClient.uploadFile(is, source.length(), FilenameUtils.getExtension(source.getName()), null);
+            // 获得文件上传后访问地址
+            String fullPath = storePath.getFullPath();
+            // 打印访问地址
+            System.out.println("fullPath = " + fullPath);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (is != null) {
+                    // 关闭流资源
+                    is.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @Test
     void contextLoads() {

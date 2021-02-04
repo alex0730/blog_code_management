@@ -35,7 +35,7 @@ public interface PictureService extends IService<PictureModel> {
      * @param request
      * @return
      */
-    String uploadFile(MultipartFile file, HttpServletRequest request) throws IOException;
+    PictureModel uploadFile(MultipartFile file, HttpServletRequest request) throws IOException;
 
 
 }

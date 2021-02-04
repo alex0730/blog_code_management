@@ -45,3 +45,15 @@ logging:
     com:
       lee:
         mapper: debug
+#fastdfs文件服务器配置
+fdfs:
+  so-timeout: 3000
+  connect-timeout: 1000
+  thumb-image:
+    width: 60
+    height: 60
+  tracker-list:
+    - 192.168.80.128:22122
+#springboot文件上传限制
+spring.servlet.multipart.max-file-size: 130MB
+spring.servlet.multipart.max-request-size: 130MB

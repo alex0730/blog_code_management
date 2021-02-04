@@ -44,7 +44,7 @@ public class PictureController extends BasicController {
 
     @PostMapping("upload")
     @ResponseBody
-    public String upload(HttpServletRequest request) throws Exception {
+    public Object upload(HttpServletRequest request) throws Exception {
         return pictureService.uploadFile(((MultipartHttpServletRequest) request).getFile("file"), request);
     }
 

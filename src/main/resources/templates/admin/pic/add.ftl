@@ -79,7 +79,7 @@
                 <div class="col-md-2 control-label">
                     <label>图片预览</label>
                 </div>
-                <img id="preview" src="">
+                <img id="preview" src="" align="center" onload="DrawImage(this,200,200)">
             </div>
             <input name="picUrl" id="picUrl" value="" hidden/>
             <input name="thumbnailUrl" id="thumbnailUrl" value="" hidden/>
@@ -94,6 +94,31 @@
 </div>
 <script src="/static/lib/wangeditor/wangEditor.js"></script>
 <script type="text/javascript">
+    function DrawImage(ImgD, width_s, height_s) {
+        var image = new Image();
+        image.src = ImgD.src;
+        if (image.width > 0 && image.height > 0) {
+            flag = true;
+            if (image.width / image.height >= width_s / height_s) {
+                if (image.width > width_s) {
+                    ImgD.width = width_s;
+                    ImgD.height = (image.height * width_s) / image.width;
+                } else {
+                    ImgD.width = image.width;
+                    ImgD.height = image.height;
+                }
+            } else {
+                if (image.height > height_s) {
+                    ImgD.height = height_s;
+                    ImgD.width = (image.width * height_s) / image.height;
+                } else {
+                    ImgD.width = image.width;
+                    ImgD.height = image.height;
+                }
+            }
+        }
+    }
+
     function validateAndSubmitForm(formId, btnThis, eventName) {
         var formSelector = $("#" + formId);
         var isValid = validateForm(formId);	//验证表单 
@@ -170,8 +195,8 @@
             contentType: false,
             processData: false,
             success: function (data) {
-                $("#picUrl").attr("value", data);
-                $("#thumbnailUrl").attr("value", data);
+                $("#picUrl").attr("value", data.picUrl);
+                $("#thumbnailUrl").attr("value", data.thumbnailUrl);
             }
         });
     }

@@ -100,7 +100,7 @@
             width: 150,//宽度
             title: '缩略图',
             formatter: function (value, row, index) {
-                var content = '<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="" src="/static/admin/images' + row.pic_url + '" class="user-image"></a>';
+                var content = '<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="" src="http://192.168.80.128/' + row.thumbnail_url + '" class="user-image"></a>';
                 // var content = '<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="" src="/static/admin/images/avator.jpg" class="user-image"></a>';
                 return content;
             }

@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.lee.entity.PictureModel;
 import com.lee.mapper.PictureMapper;
 import com.lee.service.PictureService;
-import org.apache.commons.io.FileUtils;
+import net.coobird.thumbnailator.Thumbnails;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
+import java.io.*;
 import java.util.Map;
 
 /**
@@ -33,6 +35,9 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, PictureModel>
     private final String filePath = "E:/blog_code_management/src/main/resources/static/admin/images";
 
     @Autowired
+    private FastFileStorageClient storageClient;
+
+    @Autowired
     private PictureMapper pictureMapper;
 
     /**
@@ -43,16 +48,45 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, PictureModel>
      * @return
      */
     @Override
-    public String uploadFile(MultipartFile file, HttpServletRequest request) {
-        String imgFilePath = "";
+    public PictureModel uploadFile(MultipartFile file, HttpServletRequest request) {
+        PictureModel result = new PictureModel();
         try {
-            // TODO 根据“图片标签”表确定上传到哪个文件夹下
-            imgFilePath = "/shanghai/" + file.getOriginalFilename();
-            FileUtils.copyInputStreamToFile(file.getInputStream(), new File(filePath + imgFilePath));
+            // 上传图片
+            InputStream inputStream = file.getInputStream();
+            String picUrl = storageClient.uploadFile(
+                    inputStream,
+                    file.getSize(),
+                    FilenameUtils.getExtension(file.getOriginalFilename()),
+                    null).getFullPath();
+            result.setPicUrl(picUrl);
+            // 上传缩略图
+            File thumbnailsFile = new File(file.getOriginalFilename());
+            Thumbnails.of(file.getInputStream()).size(200, 200).toFile(thumbnailsFile);
+            String thumbnailUrl = storageClient.uploadFile(
+                    new FileInputStream(thumbnailsFile),
+                    thumbnailsFile.length(),
+                    FilenameUtils.getExtension(file.getOriginalFilename()),
+                    null).getFullPath();
+            result.setThumbnailUrl(thumbnailUrl);
         } catch (Exception e) {
             logger.error("上传文件失败：", e);
         }
-        return imgFilePath;
+        return result;
+    }
+
+    private static void inputStreamToFile(InputStream ins, File file) {
+        try {
+            OutputStream os = new FileOutputStream(file);
+            int bytesRead = 0;
+            byte[] buffer = new byte[8192];
+            while ((bytesRead = ins.read(buffer, 0, 8192)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+            os.close();
+            ins.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
