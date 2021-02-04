@@ -42,6 +42,25 @@ public class PictureController extends BasicController {
     @Autowired
     private PictureTagService pictureTagService;
 
+    @PostMapping("/use")
+    @ResponseBody
+    public Message doUse(Integer id, Boolean flag) {
+        int status = 1;
+        try {
+            PictureModel pictureModel = new PictureModel();
+            pictureModel.setId(id);
+            if (flag) {
+                status = 0;
+            }
+            pictureModel.setStatus(status);
+            pictureService.updateById(pictureModel);
+        } catch (Exception e) {
+            logger.error("图片状态修改异常：", e);
+            return Message.fail("图片状态修改成功失败！");
+        }
+        return Message.success("图片状态修改成功！");
+    }
+
     @PostMapping("upload")
     @ResponseBody
     public Object upload(HttpServletRequest request) throws Exception {
@@ -178,33 +197,6 @@ public class PictureController extends BasicController {
 //        model.addAttribute("articleInfo",article);
 //       return "admin/article/update";
 //    }
-//    @PostMapping("/update")
-//    @ResponseBody
-//    public Message doUpdate(@Validated Article article){
-//        try{
-//            Article articleInfo = articleService.getById(article.getId());
-//            if(articleInfo != null) {
-//                if(article.getIsTop() == null) {
-//                    articleInfo.setIsTop(0);
-//                } else {
-//                    articleInfo.setIsTop(article.getIsTop());
-//                }
-//
-//                articleInfo.setTitle(article.getTitle());
-//                articleInfo.setAuthorname(article.getAuthorname());
-//                articleInfo.setTags(article.getTags());
-//                articleInfo.setArtdesc(article.getArtdesc());
-//                articleInfo.setContent(article.getContent());
-//                articleInfo.setCateId(article.getCateId());
-//                articleInfo.setUpdateTime(DateTimeUtil.nowTimeStr());
-//                articleService.updateById(articleInfo);
-//                return Message.success("文章修改成功!");
-//            } else {
-//                return Message.fail("文章不存在或已被删除！");
-//            }
-//        } catch (Exception e) {
-//            return Message.fail("文章修改保存异常，操作失败！");
-//        }
-//    }
+
 
 }

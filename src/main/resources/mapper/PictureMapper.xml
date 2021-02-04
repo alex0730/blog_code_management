@@ -16,6 +16,7 @@
         <result property="commentNum" column="comment_num"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
+        <result property="status" column="status"/>
         <result property="sort" column="sort"/>
         <result property="picUrl" column="pic_url"/>
         <result property="thumbnailUrl" column="thumbnail_url"/>

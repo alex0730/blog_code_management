@@ -66,6 +66,10 @@ public class PictureModel extends Model<PictureModel> implements Serializable {
      */
     private String thumbnailUrl;
     /**
+     * 状态
+     */
+    private Integer status;
+    /**
      * 创建时间
      */
     private String createTime;
@@ -76,6 +80,14 @@ public class PictureModel extends Model<PictureModel> implements Serializable {
 
     // setter and getter
 
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     public String getThumbnailUrl() {
         return thumbnailUrl;

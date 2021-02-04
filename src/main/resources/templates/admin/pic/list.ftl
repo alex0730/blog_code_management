@@ -67,7 +67,8 @@
 <#include "admin/common/_js.ftl">
 <script>
     var pic_insert_modal_url = '/admin/pic/add'; //新增注册url
-    var cate_list_update_url = '/admin/cate/update/'; //更新信息URL
+    var pic_list_update_url = '/admin/pic/update/'; //更新信息URL
+    var pic_list_use_url = '/admin/pic/use/'; //更新信息URL
     var pic_list_delete_url = '/admin/pic/delete'; //删除URL
     var pic_list_table; //用户表对象
     var pic_list_table_id = 'pic_list_table'; //用户表id
@@ -120,8 +121,15 @@
             title: '添加时间'
         },
         {
-            field: 'update_time',
-            title: '更新时间'
+            field: 'status',
+            title: '状态',
+            formatter: function (value, row, index) {
+                var content = "启用";
+                if (row.status === 1) {
+                    content = "停用";
+                }
+                return content;
+            }
         },
         {
             field: 'sort',
@@ -137,12 +145,11 @@
             title: '操作',
             formatter: function (value, row, index) {
                 var result = '';
-                result += '<button class="btn btn-xs btn-primary" onclick="openModal(\''
-                    + cate_list_update_url
-                    + row.id
-                    + '\', \'cate_listUpdateModal\', \''
-                    + pic_list_table_id
-                    + '\');">修改</button>&nbsp;';
+                if (row.status === 1) {
+                    result += '<button class="btn btn-xs btn-primary" onclick="openOrCloseConfirm(\'确认要启用照片吗？\',\'' + pic_list_use_url + '\',\'' + row.id + '\',\'' + pic_list_table_id + '\',\'true\')">启用</button>&nbsp;';
+                } else {
+                    result += '<button class="btn btn-xs btn-primary" onclick="openOrCloseConfirm(\'确认要停用照片吗？\',\'' + pic_list_use_url + '\',\'' + row.id + '\',\'' + pic_list_table_id + '\',\'false\')">停用</button>&nbsp;';
+                }
                 result += '<button class="btn btn-xs btn-danger" onclick="deleteConfirm(\''
                     + pic_list_delete_url
                     + '\',\'' + row.id + '\',\'' + pic_list_table_id + '\');">删除</button>';

@@ -74,21 +74,6 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, PictureModel>
         return result;
     }
 
-    private static void inputStreamToFile(InputStream ins, File file) {
-        try {
-            OutputStream os = new FileOutputStream(file);
-            int bytesRead = 0;
-            byte[] buffer = new byte[8192];
-            while ((bytesRead = ins.read(buffer, 0, 8192)) != -1) {
-                os.write(buffer, 0, bytesRead);
-            }
-            os.close();
-            ins.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * 分页查询图片列表
      *
