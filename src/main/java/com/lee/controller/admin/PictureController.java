@@ -52,13 +52,14 @@ public class PictureController extends BasicController {
             if (flag) {
                 status = 0;
             }
+            pictureModel.setUpdateTime(DateTimeUtil.nowTimeStr());
             pictureModel.setStatus(status);
             pictureService.updateById(pictureModel);
         } catch (Exception e) {
-            logger.error("图片状态修改异常：", e);
-            return Message.fail("图片状态修改成功失败！");
+            logger.error("图片修改异常：", e);
+            return Message.fail("图片状态修改失败！");
         }
-        return Message.success("图片状态修改成功！");
+        return Message.success("修改成功！");
     }
 
     @PostMapping("upload")
@@ -86,7 +87,7 @@ public class PictureController extends BasicController {
             Map<String, Object> searchParams = (HashMap<String, Object>) jsonObject.get("search");
             IPage<Map<String, Object>> page = pictureService.getPageInfo(searchParams,
                     StringUtils.isEmpty(jsonObject.getString("offset")) ? 0 : jsonObject.getIntValue("offset"),
-                    StringUtils.isEmpty(jsonObject.getString("limit")) ? 10 : jsonObject.getIntValue("limit"));
+                    StringUtils.isEmpty(jsonObject.getString("limit")) ? 5 : jsonObject.getIntValue("limit"));
             result.setTotal(page.getTotal());
             result.setRows(page.getRecords());
         } catch (Exception e) {
@@ -129,9 +130,9 @@ public class PictureController extends BasicController {
             pictureService.save(pictureModel);
         } catch (Exception e) {
             logger.error("保存图片信息异常：", e);
-            return Message.fail("图片保存失败！");
+            return Message.fail("保存失败！");
         }
-        return Message.success("图片保存成功！");
+        return Message.success("保存成功！");
     }
 
     /**
@@ -161,6 +162,7 @@ public class PictureController extends BasicController {
             PictureModel pictureModel = pictureService.getById(id);
             if (pictureModel != null) {
                 pictureModel.setSort(sort);
+                pictureModel.setUpdateTime(DateTimeUtil.nowTimeStr());
                 pictureService.updateById(pictureModel);
                 return Message.success("排序成功！");
             } else {

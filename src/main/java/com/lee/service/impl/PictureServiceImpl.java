@@ -1,6 +1,5 @@
 package com.lee.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -17,7 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,8 +33,6 @@ import java.util.Map;
 public class PictureServiceImpl extends ServiceImpl<PictureMapper, PictureModel> implements PictureService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    private final String filePath = "E:/blog_code_management/src/main/resources/static/admin/images";
 
     @Autowired
     private FastFileStorageClient storageClient;
@@ -86,13 +86,14 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, PictureModel>
     public IPage<Map<String, Object>> getPageInfo(Map<String, Object> queryParam, int offset, int size) {
         IPage<Map<String, Object>> mapIpage = new Page<>();
         try {
-            QueryWrapper<PictureModel> queryWrapper = new QueryWrapper<>();
-            if (queryParam.get("title") != null) {
-                queryWrapper.like("title", queryParam.get("title"));
-            }
-            queryWrapper.orderByDesc("sort", "create_time");
-            Page<PictureModel> page = new Page<>(offset / size + 1, size);
-            mapIpage = pictureMapper.selectMapsPage(page, queryWrapper);
+            String title = (String) queryParam.get("title");
+            String tagCnName = (String) queryParam.get("tagCnName");
+            List<Map<String, Object>> list = pictureMapper.selectPictureModel(title,
+                    (String) queryParam.get("tagCnName"), offset, size);
+            mapIpage.setCurrent(offset);
+            mapIpage.setPages(offset / size + 1);
+            mapIpage.setTotal(pictureMapper.selectPictureModelCount(title, tagCnName));
+            mapIpage.setRecords(list);
         } catch (Exception e) {
             logger.error("分页查询图片列表异常：", e);
         }

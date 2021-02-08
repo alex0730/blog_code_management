@@ -22,4 +22,40 @@
         <result property="thumbnailUrl" column="thumbnail_url"/>
     </resultMap>
 
+    <select id="selectPictureModel" resultMap="pictureMapper">
+        SELECT
+        picture.id AS id,
+        picture.title as title,
+        picture_tag.tag_cn_name AS tags,
+        remark AS remark,
+        STATUS AS status,
+        sort AS sort,
+        pic_url AS pic_url,
+        thumbnail_url AS thumbnail_url
+        FROM
+        picture
+        JOIN picture_tag ON picture.tags = picture_tag.work_id WHERE 1 = 1
+        <if test="title != null and title != ''">
+            AND picture.title LIKE CONCAT('%',#{title},'%')
+        </if>
+        <if test="tagCnName != null and tagCnName != ''">
+            AND picture_tag.tag_cn_name LIKE CONCAT('%',#{tagCnName},'%')
+        </if>
+        ORDER BY sort, create_time LIMIT #{pageNo},#{pageSize};
+    </select>
+
+    <select id="selectPictureModelCount" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        picture
+        JOIN picture_tag ON picture.tags = picture_tag.work_id WHERE 1 = 1
+        <if test="title != null and title != ''">
+            AND picture.title LIKE CONCAT('%',#{title},'%')
+        </if>
+        <if test="tagCnName != null and tagCnName != ''">
+            AND picture_tag.tag_cn_name LIKE CONCAT('%',#{tagCnName},'%')
+        </if>
+    </select>
+
 </mapper>

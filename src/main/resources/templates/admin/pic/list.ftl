@@ -29,6 +29,7 @@
                     <div class="form-group">
                         <select class="form-control" name="search_type">
                             <option value="title" selected>图片标题</option>
+                            <option value="tagCnName">图片标签</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -101,7 +102,7 @@
             width: 150,//宽度
             title: '缩略图',
             formatter: function (value, row, index) {
-                var content = '<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="" src="http://192.168.80.128/' + row.thumbnail_url + '" class="user-image"></a>';
+                var content = '<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="" src="http://192.168.80.128/' + row.thumbnailUrl + '" class="user-image"></a>';
                 // var content = '<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="" src="/static/admin/images/avator.jpg" class="user-image"></a>';
                 return content;
             }
@@ -112,13 +113,13 @@
             title: '图片标题'
         },
         {
-            field: 'pic_url',
+            field: 'picUrl',
             width: 450,//宽度
             title: '图片地址'
         },
         {
-            field: 'create_time',
-            title: '添加时间'
+            field: 'tags',
+            title: '图片标签'
         },
         {
             field: 'status',
@@ -174,7 +175,7 @@
             queryParams: queryParams,
             sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
             pageNumber: 1, //初始化加载第一页，默认第一页
-            pageSize: 10, //每页的记录行数（*）
+            pageSize: 5, //每页的记录行数（*）
             pageList: [10, 20, 50], //可供选择的每页的行数（*）
             uniqueId: "id", //每一行的唯一标识，一般为主键列
             onLoadSuccess: function (data) { //加载成功时执行

@@ -43,7 +43,7 @@
                             data-options="required:true,messages:{required:'请选择一个图片标签'}">
                         <option value="">图片标签</option>
                         <#list pictureTagInfos as pictureTagInfo>
-                            <option value="${pictureTagInfo.tagCnName}">${pictureTagInfo.tagCnName}</option>
+                            <option value="${pictureTagInfo.workId}">${pictureTagInfo.tagCnName}</option>
                         </#list>
                     </select>
                 </div>
