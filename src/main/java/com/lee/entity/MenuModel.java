@@ -1,5 +1,8 @@
 package com.lee.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,6 +13,7 @@ import java.util.List;
  * @author <a href="mailto: wuyingya@oristartech.com">吴迎亚</a>
  * @version 1.0
  */
+@TableName("menu")
 public class MenuModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,6 +42,10 @@ public class MenuModel implements Serializable {
      * 父节点(0：为父节点)
      */
     private String parentId;
+    /**
+     * 父节点名称(0：为父节点)
+     */
+    private String parentName;
 
     /**
      * 菜单级别(一级菜单（父节点）：1；二级菜单：2；依次类推)
@@ -52,12 +60,33 @@ public class MenuModel implements Serializable {
      */
     private String menuUrl;
     /**
+     * 菜单状态
+     */
+    private Integer status;
+    /**
      * 子菜单
      */
+    @TableField(exist = false)
     private List<MenuModel> sonMenus;
 
     // setter and getter
 
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
 
     public String getMenuUrl() {
         return menuUrl;

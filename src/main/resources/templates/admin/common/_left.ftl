@@ -16,14 +16,14 @@
             </li>
             <!-- TODO menuList判空 -->
             <#list menuList as menu>
-                <#if menu.parentId == "0" && menu.name != "user">
+                <#if menu.parentId == "0"  && !(menu.sonMenus??)>
                     <li><a href="/admin/${menu.menuUrl}" id="admin_${menu.name}"><i
                                     class="fa fa-dashboard fa-fw"></i> ${menu.cnName}</a></li>
-                <#elseif menu.parentId == "0" && menu.name == "user">
-                    <li><a href="javascript:void(0);"><i class="fa fa-user fa-fw"></i>用户管理<span class="fa arrow"></span></a>
+                <#else>
+                    <li><a href="javascript:void(0);"><i class="fa fa-user fa-fw"></i>${menu.cnName}<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level hidden">
                             <#list menu.sonMenus as sonMenus>
-                                <li><a href="/admin/${sonMenus.menuUrl}" id="admin_member">${sonMenus.cnName}</a></li>
+                                <li><a href="/admin/${sonMenus.menuUrl}" id="admin_${sonMenus.name}">${sonMenus.cnName}</a></li>
                             </#list>
                         </ul>
                     </li>

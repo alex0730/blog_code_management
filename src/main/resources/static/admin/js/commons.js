@@ -44,7 +44,9 @@ function commonLogin(formId) {
 function searchDataInit(formId) {
     var searchObj = $("#" + formId).serializeJson();
     var searchType = searchObj.search_type;
+    console.info("searchType：" + searchType);
     var searchValue = searchObj.search_value;
+    console.info("searchValue：" + searchValue);
     searchObj[searchType] = searchValue;
     delete searchObj.search_type;
     delete searchObj.search_value;

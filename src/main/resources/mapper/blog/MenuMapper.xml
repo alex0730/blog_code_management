@@ -11,6 +11,7 @@
         <result property="name" column="name"/>
         <result property="remark" column="remark"/>
         <result property="parentId" column="parent_id"/>
+        <result property="parentName" column="parent_name"/>
         <result property="level" column="level"/>
         <result property="orderId" column="order_id"/>
         <result property="menuUrl" column="menu_url"/>
@@ -24,6 +25,7 @@
             menu.`name` AS name,
             menu.remark AS remark,
             menu.parent_id AS parent_id,
+            menu.parent_name AS parent_name,
             menu.level AS level,
             menu.menu_url AS menu_url
         FROM
